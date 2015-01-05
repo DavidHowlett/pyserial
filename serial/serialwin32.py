@@ -58,8 +58,9 @@ class Win32Serial(SerialBase):
             self.hComPort = None    # 'cause __del__ is called anyway
             raise SerialException("could not open port %s: %s" % (self.portstr, ctypes.WinError()))
 
-        # Setup a 4k buffer
-        win32.SetupComm(self.hComPort, 4096, 4096)
+        # Setup a 1MB buffer
+        self.bufferSize = 2**20 
+        win32.SetupComm(self.hComPort, self.bufferSize, self.bufferSize)
 
         # Save original timeout values:
         self._orgTimeouts = win32.COMMTIMEOUTS()
