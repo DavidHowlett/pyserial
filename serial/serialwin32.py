@@ -249,6 +249,9 @@ class Win32Serial(SerialBase):
         else:
             read = bytes()
         return bytes(read)
+    
+    def read_all(self):
+        return self.read(self.inWaiting())
 
     def write(self, data):
         """Output the given string over the serial port."""

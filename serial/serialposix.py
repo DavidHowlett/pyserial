@@ -511,7 +511,7 @@ class PosixSerial(SerialBase):
             self._isOpen = False
             if self.welocked is not None and self.welocked is True and self.lockfilename is not None:
                 releaseLock(self._port, self.lockfilename)
-		self.welocked = False
+                self.welocked = False
 
     def makeDeviceName(self, port):
         return device(port)
