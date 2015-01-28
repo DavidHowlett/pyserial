@@ -20,11 +20,11 @@ else:
     import os
     # chose an implementation, depending on os
     if os.name == 'nt': #sys.platform == 'win32':
-        from serial.serialwin32 import *
+        from .serialwin32 import *
     elif os.name == 'posix':
-        from serial.serialposix import *
+        from .serialposix import *
     elif os.name == 'java':
-        from serial.serialjava import *
+        from .serialjava import *
     else:
         raise ImportError("Sorry: no implementation for your platform ('%s') available" % (os.name,))
 
