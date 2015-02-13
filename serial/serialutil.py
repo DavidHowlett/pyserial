@@ -52,6 +52,8 @@ def to_bytes(seq):
     """convert a sequence to a bytes type"""
     b = bytearray()
     for item in seq:
+        if type(item) == str:
+            item = ord(item)
         b.append(item)  # this one handles int and str
     return bytes(b)
 
