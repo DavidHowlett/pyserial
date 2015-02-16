@@ -353,7 +353,7 @@ class PosixSerial(SerialBase):
         # open
         try:
             self.fd = os.open(self.portstr, os.O_RDWR|os.O_NOCTTY|os.O_NONBLOCK)
-        except (Exception, msg):
+        except Exception as msg:
             self.fd = None
             raise SerialException("could not open port %s,%s: %s" % (self._port, self.portstr, msg))
         #~ fcntl.fcntl(self.fd, FCNTL.F_SETFL, 0)  # set blocking
@@ -393,7 +393,7 @@ class PosixSerial(SerialBase):
         try:
             orig_attr = termios.tcgetattr(self.fd)
             iflag, oflag, cflag, lflag, ispeed, ospeed, cc = orig_attr
-        except (termios.error, msg):      # if a port is nonexistent but has a /dev file, it'll fail here
+        except termios.error as msg:      # if a port is nonexistent but has a /dev file, it'll fail here
             raise SerialException("Could not configure port: %s" % msg)
         # set up raw mode / no echo / binary
         cflag |=  (TERMIOS.CLOCAL|TERMIOS.CREAD)
@@ -573,7 +573,7 @@ class PosixSerial(SerialBase):
                         raise writeTimeoutError
                 d = d[n:]
                 t = t - n
-            except (OSError, v):
+            except OSError as v:
                 if v.errno != errno.EAGAIN:
                     raise SerialException('write failed: %s' % (v,))
         return len(data)
