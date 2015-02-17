@@ -298,7 +298,7 @@ class SerialBase(object):
                 self.portstr = self.makeDeviceName(port)
         else:
             self.portstr = None
-        self._port = port
+        self._port = self.portstr
         self.name = self.portstr
         if was_open: self.open()
 
