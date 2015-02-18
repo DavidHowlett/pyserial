@@ -36,7 +36,8 @@ plat = sys.platform.lower()
 if   plat[:5] == 'linux':    # Linux (confirmed)
 
     def device(port):
-        return '/dev/ttyS%d' % port
+        #return '/dev/ttyS%d' % port # works normally
+        return '/dev/ttyUSB%d' % port # works with my usb cable
 
     ASYNC_SPD_MASK = 0x1030
     ASYNC_SPD_CUST = 0x0030
@@ -298,7 +299,7 @@ def acquireLock(port, path, secondTry = False):
     else:
         try:
             fhLock = os.open(path, os.O_EXCL|os.O_CREAT|os.O_RDWR)
-            os.write(fhLock,str(os.getpid())+"\n")
+            os.write(fhLock,bytes(str(os.getpid()),'UTF-8')+b"\n")
             os.close(fhLock)
             return True
         except OSError as oserr:
@@ -341,7 +342,8 @@ class PosixSerial(SerialBase):
     """Serial port class POSIX implementation. Serial port configuration is 
     done with termios and fcntl. Runs on Linux and many other Un*x like
     systems."""
-
+    if plat[:5] == 'linux':
+        bufferSize = 4096
     def open(self):
         """Open port with current settings. This may throw a SerialException
            if the port cannot be opened."""
@@ -549,6 +551,9 @@ class PosixSerial(SerialBase):
                 raise SerialException('device reports readiness to read but returned no data (device disconnected?)')
             read.extend(buf)
         return bytes(read)
+
+    def read_all(self):
+        return self.read(self.inWaiting())
 
     def write(self, data):
         """Output the given string over the serial port."""
