@@ -288,7 +288,7 @@ class SerialBase(object):
     def setPort(self, port):
         """Change the port. The attribute portstr is set to a string that
            contains the name of the port."""
-        assert(port is int)
+        isinstance(port,int)
         was_open = self._isOpen
         if was_open: self.close()
         self._port = port

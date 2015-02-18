@@ -361,7 +361,7 @@ class PosixSerial(SerialBase):
         #~ fcntl.fcntl(self.fd, FCNTL.F_SETFL, 0)  # set blocking
         
         #create lockfile for port
-        base = self._port.split('/')[-1]
+        base = self.portstr.split('/')[-1]
         self.lockfilename = getLockfilePath(base)
         self.welocked = False
         self.welocked = acquireLock(self._port, self.lockfilename)
