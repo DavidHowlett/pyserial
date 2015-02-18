@@ -288,20 +288,17 @@ class SerialBase(object):
     def setPort(self, port):
         """Change the port. The attribute portstr is set to a string that
            contains the name of the port."""
-
+        assert(port is int)
         was_open = self._isOpen
         if was_open: self.close()
-        if port is not None:
-            if isinstance(port, str):
-                self.portstr = port
-            else:
-                self.portstr = self.makeDeviceName(port)
-        else:
+        self._port = port
+        if port is None:
             self.portstr = None
-        self._port = self.portstr
+        else:
+            self.portstr = self.makeDeviceName(port)
+            if was_open: self.open()
         self.name = self.portstr
-        if was_open: self.open()
-
+    
     def getPort(self):
         """Get the current port setting. The value that was passed on init or using
            setPort() is passed back. See also the attribute portstr which contains
